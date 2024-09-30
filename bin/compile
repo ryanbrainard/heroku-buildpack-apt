@@ -69,7 +69,12 @@ case "$APT_VERSION" in
   *)         APT_FORCE_YES=("--allow-downgrades" "--allow-remove-essential" "--allow-change-held-packages");;
 esac
 
-add-apt-repository "${APT_OPTIONS[@]}" -y ppa:git-core/ppa  2>&1 | indent
+# DEBUG
+gpg --keyserver keyserver.ubuntu.com --recv-keys E363C90F8F1B6217
+gpg --export --armor E363C90F8F1B6217 | apt-key add -
+gpg --keyserver keyserver.ubuntu.com --recv-keys A1715D88E1DF1F24
+gpg --export --armor A1715D88E1DF1F24 | apt-key add -
+
 
 if [[ -f "$APT_CACHE_DIR/Aptfile" ]] && cmp -s "$BUILD_DIR/Aptfile" "$APT_CACHE_DIR/Aptfile" && [[ "$CACHED_STACK" == "$STACK" ]] ; then
   # Old Aptfile is the same as new and STACK has not changed
